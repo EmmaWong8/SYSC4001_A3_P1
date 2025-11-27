@@ -71,6 +71,7 @@ struct PCB{
     unsigned int time_to_next_io;   // tracks when to start IO
     unsigned int remaining_io_time; // while in waiting queue
     unsigned int priority;          // for EP and EP+RR
+    unsigned int time_slice_used;   
 };
 
 //------------------------------------HELPER FUNCTIONS FOR THE SIMULATOR------------------------------
@@ -279,6 +280,7 @@ PCB add_process(std::vector<std::string> tokens) {
     process.time_to_next_io = process.io_freq;  //counting down
     process.remaining_io_time = 0;
     process.priority = process.PID;
+    process.time_slice_used = 100;  // quantum is 100 ms
 
     return process;
 }

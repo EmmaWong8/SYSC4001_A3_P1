@@ -28,9 +28,6 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                                     //see in questions. You don't need to use it, I put it here
                                     //to make the code easier :).
     
-    const unsigned int QUANTUM = 100;
-    unsigned int quantum_used = 0;
-    
     unsigned int current_time = 0;
     PCB running;
 
