@@ -276,7 +276,7 @@ PCB add_process(std::vector<std::string> tokens) {
     process.partition_number = -1;
     process.state = NOT_ASSIGNED;
 
-    process.time_to_next_io = 0;
+    process.time_to_next_io = process.io_freq;  //counting down
     process.remaining_io_time = 0;
     process.priority = process.PID;
 
