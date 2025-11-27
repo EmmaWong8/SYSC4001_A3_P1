@@ -1,6 +1,8 @@
 /**
  * @file interrupts.cpp
  * @author Sasisekhar Govind
+ * @author Eshal Kashif
+ * @author Emma Wong
  * @brief template main.cpp file for Assignment 3 Part 1 of SYSC4001
  * 
  */
