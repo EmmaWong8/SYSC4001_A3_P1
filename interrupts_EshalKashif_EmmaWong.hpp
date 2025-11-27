@@ -67,6 +67,10 @@ struct PCB{
     enum states     state;
     unsigned int    io_freq;
     unsigned int    io_duration;
+
+    unsigned int time_to_next_io;   // tracks when to start IO
+    unsigned int remaining_io_time; // while in waiting queue
+    unsigned int priority;          // for EP and EP+RR
 };
 
 //------------------------------------HELPER FUNCTIONS FOR THE SIMULATOR------------------------------
@@ -271,6 +275,10 @@ PCB add_process(std::vector<std::string> tokens) {
     process.start_time = -1;
     process.partition_number = -1;
     process.state = NOT_ASSIGNED;
+
+    process.time_to_next_io = 0;
+    process.remaining_io_time = 0;
+    process.priority = process.PID;
 
     return process;
 }
