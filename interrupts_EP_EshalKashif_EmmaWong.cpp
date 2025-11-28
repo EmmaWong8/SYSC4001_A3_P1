@@ -45,29 +45,33 @@ void execute_one_ms(PCB &running,
     running.time_slice_used++;
     running.time_to_next_io--;
 
-    // Check if process should go to I/O (but not if it's finishing now)
-    if (running.remaining_time > 0 && running.io_freq > 0 && running.time_to_next_io == 0) {
+    unsigned int event_time = current_time + 1;
+
+    // If process finished CPU
+    if (running.remaining_time == 0) {
+        states old = running.state;
+        terminate_process(running, job_list);
+        execution_status += print_exec_status(event_time, running.PID, old, TERMINATED);
+        idle_CPU(running);
+        return;
+    }
+
+    // Check if process should go to I/O
+    if (running.io_freq > 0 && running.time_to_next_io == 0) {
         // RUNNING to WAITING
         states old = running.state;
         running.state = WAITING;
         running.remaining_io_time = running.io_duration;
         sync_queue(job_list, running);
         wait_queue.push_back(running);
-        execution_status += print_exec_status(current_time, running.PID, old, WAITING);
+        execution_status += print_exec_status(event_time, running.PID, old, WAITING);
 
         // CPU becomes idle
         idle_CPU(running);
         return;
     }
 
-    // If process finished CPU
-    if (running.remaining_time == 0) {
-        states old = running.state;
-        terminate_process(running, job_list);
-        execution_status += print_exec_status(current_time+1, running.PID, old, TERMINATED);
-        idle_CPU(running);
-        return;
-    }
+    
 }
 
 
@@ -95,7 +99,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
     //Loop while till there are no ready or waiting processes.
     //This is the main reason I have job_list, you don't have to use it.
     while(!all_process_terminated(job_list) || job_list.empty()) {
-
+        bool io_completed= false;
         //Inside this loop, there are three things you must do:
         // 1) Populate the ready queue with processes as they arrive
         // 2) Manage the wait queue
@@ -127,6 +131,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                 }
 
                 if (p.remaining_io_time == 0) {
+                    unsigned int event_time = current_time+1;
                     // Change finished I/O from waiting to ready
                     states old_state = p.state;
                     p.state = READY;
@@ -135,8 +140,8 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
 
                     sync_queue(job_list, p);
                     ready_queue.push_back(p);
-                    execution_status += print_exec_status(current_time, p.PID, old_state, READY);
-
+                    execution_status += print_exec_status(event_time, p.PID, old_state, READY);
+                    io_completed = true;
                     // remove from wait_queue without skipping next
                     wait_queue.erase(wait_queue.begin() + i);
                 } else {
@@ -148,8 +153,8 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
-            // If CPU idle, try to schedule something
-        if (running.state != RUNNING && !ready_queue.empty()) {
+            // If CPU idle and io not completed this ms, try to schedule something
+        if (!io_completed && running.state != RUNNING && !ready_queue.empty()) {
             // call the scheduler
             EP(ready_queue);
 
@@ -171,7 +176,9 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
 
     }
 
-    return execution_status;
+    //return execution_status;
+    execution_status += print_exec_footer();
+    return std::make_tuple(execution_status);
 }
 
 
@@ -209,7 +216,7 @@ int main(int argc, char** argv) {
     //With the list of processes, run the simulation
     auto [exec] = run_simulation(list_process);
 
-    write_output(exec, "EPexecution2.txt");
+    write_output(exec, "EPexecution1.txt");
 
     return 0;
 }
