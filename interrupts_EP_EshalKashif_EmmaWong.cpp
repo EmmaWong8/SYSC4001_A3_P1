@@ -170,6 +170,8 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
     }
+
+    return execution_status;
 }
 
 
