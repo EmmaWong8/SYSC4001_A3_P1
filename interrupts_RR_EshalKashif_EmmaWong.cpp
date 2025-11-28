@@ -8,7 +8,6 @@
  */
 
 #include<interrupts_EshalKashif_EmmaWong.hpp>
-const unsigned int QUANTUM = 100; // for RR and EP_RR
 
 void FCFS(std::vector<PCB> &ready_queue) {
     std::sort( 

@@ -26,14 +26,12 @@ void EP(std::vector<PCB> &ready_queue) {
         ready_queue.end(),
         [](const PCB &a, const PCB &b) {
             if (a.priority == b.priority) {
-                return a.arrival_time > b.arrival_time; // tie-break by arrival (FCFS)
+                return a.arrival_time > b.arrival_time; //check arrival times if same priority
             }
-            return a.priority > b.priority; // sort so highest priority ends at back()
+            return a.priority > b.priority; //otherwise, pick the first priority 
         }
     );
 }
-
-const unsigned int QUANTUM = 100; // for RR and EP_RR; unused in EP version if you want
 
 void execute_one_ms(PCB &running,
                     std::vector<PCB> &ready_queue,
@@ -42,14 +40,14 @@ void execute_one_ms(PCB &running,
                     std::string &execution_status,
                     unsigned int current_time)
 {
-    // 1) Consume CPU
+    // Adjust variables 
     running.remaining_time--;
     running.time_slice_used++;
     running.time_to_next_io--;
 
-    // 2) Check if process should go to I/O (but not if it's finishing now)
+    // Check if process should go to I/O (but not if it's finishing now)
     if (running.remaining_time > 0 && running.io_freq > 0 && running.time_to_next_io == 0) {
-        // RUNNING → WAITING
+        // RUNNING to WAITING
         states old = running.state;
         running.state = WAITING;
         running.remaining_io_time = running.io_duration;
@@ -62,7 +60,7 @@ void execute_one_ms(PCB &running,
         return;
     }
 
-    // 3) If process finished CPU
+    // If process finished CPU
     if (running.remaining_time == 0) {
         states old = running.state;
         terminate_process(running, job_list);
@@ -70,13 +68,6 @@ void execute_one_ms(PCB &running,
         idle_CPU(running);
         return;
     }
-
-    // 4) Scheduler-specific PREEMPTION rules
-    // For EP (no preemption): do nothing.
-
-    // For RR: if time_slice_used == QUANTUM → preempt
-    // For EP_RR: if quantum used OR higher priority arrives → preempt.
-    // We'll write that logic separately in each file.
 }
 
 
@@ -157,10 +148,10 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
-            // 3) If CPU idle, try to schedule something
+            // If CPU idle, try to schedule something
         if (running.state != RUNNING && !ready_queue.empty()) {
-            // call the scheduler for this file
-            EP(ready_queue);      // or RR_scheduler / EP_RR in the other files
+            // call the scheduler
+            EP(ready_queue);
 
             states old_state = ready_queue.back().state; // should be READY
             run_process(running, job_list, ready_queue, current_time);
@@ -168,17 +159,18 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
             running.time_slice_used = 0; // reset quantum timer
         }
 
-        // 4) Execute 1 ms on the CPU (if someone is running)
+        // Execute 1 ms on the CPU (if someone is running)
         if (running.state == RUNNING) {
             execute_one_ms(running, ready_queue, wait_queue, job_list,
                         execution_status, current_time);
         }
 
-        // 5) Advance simulated time
+        // Advance simulated time
         current_time++;
         /////////////////////////////////////////////////////////////////
 
     }
+}
 
 
 int main(int argc, char** argv) {
