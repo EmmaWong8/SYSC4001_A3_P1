@@ -64,7 +64,7 @@ void execute_one_ms(PCB &running,
     if (running.remaining_time == 0) {
         states old = running.state;
         terminate_process(running, job_list);
-        execution_status += print_exec_status(current_time, running.PID, old, TERMINATED);
+        execution_status += print_exec_status(current_time+1, running.PID, old, TERMINATED);
         idle_CPU(running);
         return;
     }
@@ -209,7 +209,7 @@ int main(int argc, char** argv) {
     //With the list of processes, run the simulation
     auto [exec] = run_simulation(list_process);
 
-    write_output(exec, "EPexecution1.txt");
+    write_output(exec, "EPexecution2.txt");
 
     return 0;
 }
