@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
     //With the list of processes, run the simulation
     auto [exec] = run_simulation(list_process);
 
-    write_output(exec, "execution.txt");
+    write_output(exec, "RRexecution1.txt");
 
     return 0;
 }
