@@ -280,7 +280,7 @@ PCB add_process(std::vector<std::string> tokens) {
     process.time_to_next_io = process.io_freq;  //counting down
     process.remaining_io_time = 0;
     process.priority = process.PID;
-    process.time_slice_used = 100;  // quantum is 100 ms
+    process.time_slice_used = 0;  
 
     return process;
 }

@@ -42,7 +42,6 @@ void execute_one_ms(PCB &running,
 {
     // Adjust variables 
     running.remaining_time--;
-    running.time_slice_used++;
     running.time_to_next_io--;
 
     unsigned int event_time = current_time + 1;
@@ -132,6 +131,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
 
                 if (p.remaining_io_time == 0) {
                     unsigned int event_time = current_time+1;
+
                     // Change finished I/O from waiting to ready
                     states old_state = p.state;
                     p.state = READY;
@@ -153,7 +153,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
-            // If CPU idle and io not completed this ms, try to schedule something
+        // If CPU idle and io not completed this ms, try to schedule something
         if (!io_completed && running.state != RUNNING && !ready_queue.empty()) {
             // call the scheduler
             EP(ready_queue);
@@ -161,7 +161,6 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
             states old_state = ready_queue.back().state; // should be READY
             run_process(running, job_list, ready_queue, current_time);
             execution_status += print_exec_status(current_time, running.PID, old_state, RUNNING);
-            running.time_slice_used = 0; // reset quantum timer
         }
 
         // Execute 1 ms on the CPU (if someone is running)
@@ -176,7 +175,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
 
     }
 
-    //return execution_status;
+    //Close the output table
     execution_status += print_exec_footer();
     return std::make_tuple(execution_status);
 }
@@ -216,7 +215,7 @@ int main(int argc, char** argv) {
     //With the list of processes, run the simulation
     auto [exec] = run_simulation(list_process);
 
-    write_output(exec, "EPexecution1.txt");
+    write_output(exec, "EPexecutiontesting.txt");
 
     return 0;
 }

@@ -18,6 +18,74 @@ void FCFS(std::vector<PCB> &ready_queue) {
             );
 }
 
+// Higher priority = smaller 'priority' value
+void EP(std::vector<PCB> &ready_queue) {
+    std::sort(
+        ready_queue.begin(),
+        ready_queue.end(),
+        [](const PCB &a, const PCB &b) {
+            if (a.priority == b.priority) {
+                return a.arrival_time > b.arrival_time; //check arrival times if same priority
+            }
+            return a.priority > b.priority; //otherwise, pick the first priority 
+        }
+    );
+}
+
+void execute_one_ms(PCB &running,
+                    std::vector<PCB> &ready_queue,
+                    std::vector<PCB> &wait_queue,
+                    std::vector<PCB> &job_list,
+                    std::string &execution_status,
+                    unsigned int current_time)
+{
+    // Adjust variables 
+    running.remaining_time--;
+    running.time_slice_used++;  // count ms in current quantum
+    running.time_to_next_io--;
+
+    unsigned int event_time = current_time + 1;
+
+    // If process finished CPU
+    if (running.remaining_time == 0) {
+        states old = running.state;
+        terminate_process(running, job_list);
+        execution_status += print_exec_status(event_time, running.PID, old, TERMINATED);
+        idle_CPU(running);
+        return;
+    }
+
+    // Check if process should go to I/O
+    if (running.io_freq > 0 && running.time_to_next_io == 0) {
+        // RUNNING to WAITING
+        states old = running.state;
+        running.state = WAITING;
+        running.remaining_io_time = running.io_duration;
+        sync_queue(job_list, running);
+        wait_queue.push_back(running);
+        execution_status += print_exec_status(event_time, running.PID, old, WAITING);
+
+        // CPU becomes idle
+        idle_CPU(running);
+        return;
+    }
+
+    // Quantum = 100ms time slice expiry
+    if (running.time_slice_used >= 100) {
+        states old = running.state;
+        running.state = READY;
+
+        sync_queue(job_list, running);
+        ready_queue.push_back(running);
+        execution_status += print_exec_status(event_time, running.PID, old, READY);
+
+        // CPU becomes idle; scheduler will pick next at next tick
+        idle_CPU(running);
+        return;
+    }
+    
+}
+
 std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std::vector<PCB> list_processes) {
 
     std::vector<PCB> ready_queue;   //The ready queue of processes
@@ -41,6 +109,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
     //Loop while till there are no ready or waiting processes.
     //This is the main reason I have job_list, you don't have to use it.
     while(!all_process_terminated(job_list) || job_list.empty()) {
+        bool io_completed= false;
 
         //Inside this loop, there are three things you must do:
         // 1) Populate the ready queue with processes as they arrive
@@ -55,6 +124,8 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                 assign_memory(process);
 
                 process.state = READY;  //Set the process state to READY
+                process.time_slice_used = 0; // Set the process time slice to 0
+                
                 ready_queue.push_back(process); //Add the process to the ready queue
                 job_list.push_back(process); //Add it to the list of processes
 
@@ -74,15 +145,19 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                 }
 
                 if (p.remaining_io_time == 0) {
+                    unsigned int event_time = current_time+1;
+
                     // Change finished I/O from waiting to ready
                     states old_state = p.state;
                     p.state = READY;
                     p.time_to_next_io = p.io_freq;   // reset CPU time since last I/O
 
+                    p.time_slice_used = 0; // start fresh quantum for next CPU burst
 
                     sync_queue(job_list, p);
                     ready_queue.push_back(p);
-                    execution_status += print_exec_status(current_time, p.PID, old_state, READY);
+                    execution_status += print_exec_status(event_time, p.PID, old_state, READY);
+                    io_completed = true;
 
                     // remove from wait_queue without skipping next
                     wait_queue.erase(wait_queue.begin() + i);
@@ -95,10 +170,51 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
-        FCFS(ready_queue); //example of FCFS is shown here
+        // Preempt a running process if a higher-priority process is is ready
+        if (running.state == RUNNING && !ready_queue.empty()) {
+            
+            //call the scheduler
+            EP(ready_queue);
+            PCB &next_process = ready_queue.back();
+
+            if (next_process.priority < running.priority) {
+                // Preempt current running process
+                states old = running.state;
+                running.state = READY;
+
+                sync_queue(job_list, running);
+                ready_queue.push_back(running);
+                execution_status += print_exec_status(current_time, running.PID, old, READY);
+
+                idle_CPU(running);
+            }
+        }
+
+        // If CPU idle and something is ready, try to schedule something
+        if (!io_completed && running.state != RUNNING && !ready_queue.empty()) {
+            // call scheduler
+            EP(ready_queue);
+
+            states old_state = ready_queue.back().state; // should be READY
+            run_process(running, job_list, ready_queue, current_time);
+            execution_status += print_exec_status(current_time, running.PID, old_state, RUNNING);
+
+            // start new quantum for this process
+            running.time_slice_used = 0;
+        }
+
+        // Execute 1 ms on the CPU (if someone is running)
+        if (running.state == RUNNING) {
+            execute_one_ms(running, ready_queue, wait_queue, job_list,
+                           execution_status, current_time);
+        }
+
+        // Advance simulated time
+        current_time++;
+    }
         /////////////////////////////////////////////////////////////////
 
-    }
+    
     
     //Close the output table
     execution_status += print_exec_footer();
@@ -141,7 +257,7 @@ int main(int argc, char** argv) {
     //With the list of processes, run the simulation
     auto [exec] = run_simulation(list_process);
 
-    write_output(exec, "EP_RR_execution1.txt");
+    write_output(exec, "EP_RR_execution4.txt");
 
     return 0;
 }
