@@ -19,6 +19,68 @@ void FCFS(std::vector<PCB> &ready_queue) {
             );
 }
 
+// Higher priority = smaller 'priority' value
+void EP(std::vector<PCB> &ready_queue) {
+    std::sort(
+        ready_queue.begin(),
+        ready_queue.end(),
+        [](const PCB &a, const PCB &b) {
+            if (a.priority == b.priority) {
+                return a.arrival_time > b.arrival_time; // tie-break by arrival (FCFS)
+            }
+            return a.priority > b.priority; // sort so highest priority ends at back()
+        }
+    );
+}
+
+const unsigned int QUANTUM = 100; // for RR and EP_RR; unused in EP version if you want
+
+void execute_one_ms(PCB &running,
+                    std::vector<PCB> &ready_queue,
+                    std::vector<PCB> &wait_queue,
+                    std::vector<PCB> &job_list,
+                    std::string &execution_status,
+                    unsigned int current_time)
+{
+    // 1) Consume CPU
+    running.remaining_time--;
+    running.time_slice_used++;
+    running.time_to_next_io--;
+
+    // 2) Check if process should go to I/O (but not if it's finishing now)
+    if (running.remaining_time > 0 && running.io_freq > 0 && running.time_to_next_io == 0) {
+        // RUNNING → WAITING
+        states old = running.state;
+        running.state = WAITING;
+        running.remaining_io_time = running.io_duration;
+        sync_queue(job_list, running);
+        wait_queue.push_back(running);
+        execution_status += print_exec_status(current_time, running.PID, old, WAITING);
+
+        // CPU becomes idle
+        idle_CPU(running);
+        return;
+    }
+
+    // 3) If process finished CPU
+    if (running.remaining_time == 0) {
+        states old = running.state;
+        terminate_process(running, job_list);
+        execution_status += print_exec_status(current_time, running.PID, old, TERMINATED);
+        idle_CPU(running);
+        return;
+    }
+
+    // 4) Scheduler-specific PREEMPTION rules
+    // For EP (no preemption): do nothing.
+
+    // For RR: if time_slice_used == QUANTUM → preempt
+    // For EP_RR: if quantum used OR higher priority arrives → preempt.
+    // We'll write that logic separately in each file.
+}
+
+
+
 std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std::vector<PCB> list_processes) {
 
     std::vector<PCB> ready_queue;   //The ready queue of processes
@@ -77,7 +139,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                     // Change finished I/O from waiting to ready
                     states old_state = p.state;
                     p.state = READY;
-                    p.time_to_next_io = process.io_freq;   // reset CPU time since last I/O
+                    p.time_to_next_io = p.io_freq;   // reset CPU time since last I/O
 
 
                     sync_queue(job_list, p);
@@ -95,16 +157,28 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
-        FCFS(ready_queue); //example of FCFS is shown here
+            // 3) If CPU idle, try to schedule something
+        if (running.state != RUNNING && !ready_queue.empty()) {
+            // call the scheduler for this file
+            EP(ready_queue);      // or RR_scheduler / EP_RR in the other files
+
+            states old_state = ready_queue.back().state; // should be READY
+            run_process(running, job_list, ready_queue, current_time);
+            execution_status += print_exec_status(current_time, running.PID, old_state, RUNNING);
+            running.time_slice_used = 0; // reset quantum timer
+        }
+
+        // 4) Execute 1 ms on the CPU (if someone is running)
+        if (running.state == RUNNING) {
+            execute_one_ms(running, ready_queue, wait_queue, job_list,
+                        execution_status, current_time);
+        }
+
+        // 5) Advance simulated time
+        current_time++;
         /////////////////////////////////////////////////////////////////
 
     }
-    
-    //Close the output table
-    execution_status += print_exec_footer();
-
-    return std::make_tuple(execution_status);
-}
 
 
 int main(int argc, char** argv) {
