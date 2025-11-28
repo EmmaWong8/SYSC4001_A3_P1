@@ -77,7 +77,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                     // Change finished I/O from waiting to ready
                     states old_state = p.state;
                     p.state = READY;
-                    p.time_to_next_io = process.io_freq;   // reset CPU time since last I/O
+                    p.time_to_next_io = p.io_freq;   // reset CPU time since last I/O
 
 
                     sync_queue(job_list, p);
@@ -91,7 +91,7 @@ std::tuple<std::string /* add std::string for bonus mark */ > run_simulation(std
                     ++i;
                 }
         }
-        
+
         /////////////////////////////////////////////////////////////////
 
         //////////////////////////SCHEDULER//////////////////////////////
