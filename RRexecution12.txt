@@ -1,0 +1,41 @@
++------------------------------------------------+
+|Time of Transition |PID | Old State | New State |
++------------------------------------------------+
+|                 0 | 10 |       NEW |     READY |
+|                 0 | 10 |     READY |   RUNNING |
+|                 3 |  1 |       NEW |     READY |
+|               100 | 10 |   RUNNING |     READY |
+|               100 |  1 |     READY |   RUNNING |
+|               150 |  1 |   RUNNING |   WAITING |
+|               150 | 10 |     READY |   RUNNING |
+|               155 |  1 |   WAITING |     READY |
+|               250 | 10 |   RUNNING |     READY |
+|               250 |  1 |     READY |   RUNNING |
+|               300 |  1 |   RUNNING |   WAITING |
+|               300 | 10 |     READY |   RUNNING |
+|               305 |  1 |   WAITING |     READY |
+|               400 | 10 |   RUNNING |     READY |
+|               400 |  1 |     READY |   RUNNING |
+|               450 |  1 |   RUNNING |   WAITING |
+|               450 | 10 |     READY |   RUNNING |
+|               455 |  1 |   WAITING |     READY |
+|               550 | 10 |   RUNNING |     READY |
+|               550 |  1 |     READY |   RUNNING |
+|               600 |  1 |   RUNNING |   WAITING |
+|               600 | 10 |     READY |   RUNNING |
+|               605 |  1 |   WAITING |     READY |
+|               700 | 10 |   RUNNING |     READY |
+|               700 |  1 |     READY |   RUNNING |
+|               750 |  1 |   RUNNING |   WAITING |
+|               750 | 10 |     READY |   RUNNING |
+|               755 |  1 |   WAITING |     READY |
+|               850 | 10 |   RUNNING |TERMINATED |
+|               850 |  1 |     READY |   RUNNING |
+|               900 |  1 |   RUNNING |   WAITING |
+|               905 |  1 |   WAITING |     READY |
+|               905 |  1 |     READY |   RUNNING |
+|               955 |  1 |   RUNNING |   WAITING |
+|               960 |  1 |   WAITING |     READY |
+|               960 |  1 |     READY |   RUNNING |
+|              1010 |  1 |   RUNNING |TERMINATED |
++------------------------------------------------+
