@@ -7,6 +7,7 @@ This project implements three CPU scheduling algorithms for the SYSC 4001 Assign
 The simulator reads .txt test case files from the input_files directory and produces detailed transition tables and metrics for each scheduling algorithm.
 Generated metric CSVs detail the Throughput, Average Wait Time, Average Turnaround time and Average Response Time of each test.
 All output filestables are located in the organized directory structure below:
+
     output_files/
     │
     ├── EP_outputs/        # Output tables and .csv files for the EP scheduler
