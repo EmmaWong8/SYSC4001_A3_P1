@@ -1,0 +1,38 @@
++------------------------------------------------+
+|Time of Transition |PID | Old State | New State |
++------------------------------------------------+
+|                 0 | 10 |       NEW |     READY |
+|                 0 | 10 |     READY |   RUNNING |
+|                20 |  5 |       NEW |     READY |
+|                20 | 10 |   RUNNING |     READY |
+|                20 |  5 |     READY |   RUNNING |
+|                40 |  1 |       NEW |     READY |
+|                40 |  5 |   RUNNING |     READY |
+|                40 |  1 |     READY |   RUNNING |
+|                60 |  0 |       NEW |     READY |
+|                60 |  1 |   RUNNING |     READY |
+|                60 |  0 |     READY |   RUNNING |
+|               110 |  0 |   RUNNING |TERMINATED |
+|               110 |  1 |     READY |   RUNNING |
+|               210 |  1 |   RUNNING |     READY |
+|               210 |  1 |     READY |   RUNNING |
+|               290 |  1 |   RUNNING |TERMINATED |
+|               290 |  5 |     READY |   RUNNING |
+|               390 |  5 |   RUNNING |     READY |
+|               390 |  5 |     READY |   RUNNING |
+|               490 |  5 |   RUNNING |     READY |
+|               490 |  5 |     READY |   RUNNING |
+|               570 |  5 |   RUNNING |TERMINATED |
+|               570 | 10 |     READY |   RUNNING |
+|               670 | 10 |   RUNNING |     READY |
+|               670 | 10 |     READY |   RUNNING |
+|               770 | 10 |   RUNNING |     READY |
+|               770 | 10 |     READY |   RUNNING |
+|               870 | 10 |   RUNNING |     READY |
+|               870 | 10 |     READY |   RUNNING |
+|               970 | 10 |   RUNNING |     READY |
+|               970 | 10 |     READY |   RUNNING |
+|              1070 | 10 |   RUNNING |     READY |
+|              1070 | 10 |     READY |   RUNNING |
+|              1150 | 10 |   RUNNING |TERMINATED |
++------------------------------------------------+
