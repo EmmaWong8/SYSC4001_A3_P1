@@ -1,21 +1,27 @@
 file,num_processes,total_time_ms,throughput_proc_per_ms,avg_wait_ms,avg_turnaround_ms,avg_response_ms
-EP_RR_execution1.txt,1,10.00,0.100000,0.00,10.00,0.00
-EP_RR_execution10.txt,3,450.00,0.006667,150.00,300.00,150.00
-EP_RR_execution11.txt,2,451.00,0.004435,150.50,377.00,75.00
-EP_RR_execution12.txt,2,1007.00,0.001986,203.50,721.00,0.00
-EP_RR_execution13.txt,2,203.00,0.009852,51.50,156.00,12.50
-EP_RR_execution14.txt,2,200.00,0.010000,40.00,140.00,40.00
-EP_RR_execution15.txt,3,907.00,0.003308,304.00,611.00,151.67
-EP_RR_execution16.txt,4,900.00,0.004444,150.00,375.00,150.00
-EP_RR_execution17.txt,2,501.00,0.003992,100.50,353.00,0.00
-EP_RR_execution18.txt,2,500.00,0.004000,90.00,410.00,20.00
-EP_RR_execution19.txt,5,1259.00,0.003971,505.00,764.00,398.20
-EP_RR_execution2.txt,1,11.00,0.090909,0.00,11.00,0.00
-EP_RR_execution20.txt,4,1150.00,0.003478,212.50,500.00,0.00
-EP_RR_execution3.txt,2,15.00,0.133333,2.50,10.00,0.00
-EP_RR_execution4.txt,2,14.00,0.142857,1.50,9.50,0.00
-EP_RR_execution5.txt,2,350.00,0.005714,75.00,250.00,0.00
-EP_RR_execution6.txt,2,350.00,0.005714,98.50,273.50,98.50
-EP_RR_execution7.txt,2,14.00,0.142857,0.00,11.00,0.00
-EP_RR_execution8.txt,2,353.00,0.005666,75.00,251.50,0.00
-EP_RR_execution9.txt,3,450.00,0.006667,150.00,300.00,0.00
+EP_RR_execution1.txt,1,10,0.1,0,10,0
+EP_RR_execution10.txt,3,450,0.006667,150,300,150
+EP_RR_execution11.txt,2,451,0.004435,150.5,377,75
+EP_RR_execution12.txt,2,1007,0.001986,203.5,721,0
+EP_RR_execution13.txt,2,203,0.009852,51.5,156,12.5
+EP_RR_execution14.txt,2,200,0.01,40,140,40
+EP_RR_execution15.txt,3,907,0.003308,304,611,151.67
+EP_RR_execution16.txt,4,900,0.004444,150,375,150
+EP_RR_execution17.txt,2,501,0.003992,100.5,353,0
+EP_RR_execution18.txt,2,500,0.004,90,410,20
+EP_RR_execution19.txt,5,1259,0.003971,505,764,398.2
+EP_RR_execution2.txt,1,11,0.090909,0,11,0
+EP_RR_execution20.txt,4,1150,0.003478,212.5,500,0
+EP_RR_execution3.txt,2,15,0.133333,2.5,10,0
+EP_RR_execution4.txt,2,14,0.142857,1.5,9.5,0
+EP_RR_execution5.txt,2,350,0.005714,75,250,0
+EP_RR_execution6.txt,2,350,0.005714,98.5,273.5,98.5
+EP_RR_execution7.txt,2,14,0.142857,0,11,0
+EP_RR_execution8.txt,2,353,0.005666,75,251.5,0
+EP_RR_execution9.txt,3,450,0.006667,150,300,0
+,,,,,,
+"CPU Bounded (Tests: 3, 5, 6, 9, 10, 12, 16, 20)",2.75,584,0.021000375,130.25,341.1875,49.8125
+,,,,,,
+"I/O Bounded (Tests: 2, 4, 7, 8, 11, 14, 18)",1.857142857,220.4285714,0.057246286,51,172.8571429,19.28571429
+,,,,,,
+"Mixed CPU & I/O (Tests: 1, 13, 15, 17, 19)",2.6,576,0.0242246,192.2,378.8,112.474
