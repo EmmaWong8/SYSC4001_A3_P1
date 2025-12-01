@@ -28,4 +28,15 @@ These values are updated each simulated millisecond inside the main loop.
 #### Quantum Handling
 The quantum is not decremented. Instead, we increment a counter (time_slice_used) and compare against the quantum value. This allows clean resets when the process is preempted or returns from I/O.
 
+#### EP() Helper
+EP() sorts the ready queue using a comparator where higher numeric priority (larger PID) appears earlier in the vector, while the true highest priority (smallest PID) ends up at the back. At first glance the comparator looks reversed, but this is intentional. Our scheduler always selects the next process from ready_queue.back(). Thus, we reverse-sorting by (priority, arrival_time) and select from the back. This produces correct EP behavior: back() → smallest PID (highest priority)
+This design is consistent and correct as long as all schedulers select from the back, which our implementation does.
+
+Note: 
+- We decided to make EP() a function because we were given FCFS() in the original. We do not use FCFS() but it still exists.
+- RR does not use the EP() helper function. Instead, most RR logic is implemented directly inside execute_one_ms().
+
+
+
+
 
