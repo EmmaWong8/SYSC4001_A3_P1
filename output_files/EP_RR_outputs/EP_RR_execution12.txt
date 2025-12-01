@@ -1,0 +1,57 @@
++------------------------------------------------+
+|Time of Transition |PID | Old State | New State |
++------------------------------------------------+
+|                 0 | 10 |       NEW |     READY |
+|                 0 | 10 |     READY |   RUNNING |
+|                 3 |  1 |       NEW |     READY |
+|                 3 | 10 |   RUNNING |     READY |
+|                 3 |  1 |     READY |   RUNNING |
+|                53 |  1 |   RUNNING |   WAITING |
+|                53 | 10 |     READY |   RUNNING |
+|                58 |  1 |   WAITING |     READY |
+|                57 | 10 |   RUNNING |     READY |
+|                58 |  1 |     READY |   RUNNING |
+|               108 |  1 |   RUNNING |   WAITING |
+|               108 | 10 |     READY |   RUNNING |
+|               113 |  1 |   WAITING |     READY |
+|               112 | 10 |   RUNNING |     READY |
+|               113 |  1 |     READY |   RUNNING |
+|               163 |  1 |   RUNNING |   WAITING |
+|               163 | 10 |     READY |   RUNNING |
+|               168 |  1 |   WAITING |     READY |
+|               167 | 10 |   RUNNING |     READY |
+|               168 |  1 |     READY |   RUNNING |
+|               218 |  1 |   RUNNING |   WAITING |
+|               218 | 10 |     READY |   RUNNING |
+|               223 |  1 |   WAITING |     READY |
+|               222 | 10 |   RUNNING |     READY |
+|               223 |  1 |     READY |   RUNNING |
+|               273 |  1 |   RUNNING |   WAITING |
+|               273 | 10 |     READY |   RUNNING |
+|               278 |  1 |   WAITING |     READY |
+|               277 | 10 |   RUNNING |     READY |
+|               278 |  1 |     READY |   RUNNING |
+|               328 |  1 |   RUNNING |   WAITING |
+|               328 | 10 |     READY |   RUNNING |
+|               333 |  1 |   WAITING |     READY |
+|               332 | 10 |   RUNNING |     READY |
+|               333 |  1 |     READY |   RUNNING |
+|               383 |  1 |   RUNNING |   WAITING |
+|               383 | 10 |     READY |   RUNNING |
+|               388 |  1 |   WAITING |     READY |
+|               387 | 10 |   RUNNING |     READY |
+|               388 |  1 |     READY |   RUNNING |
+|               438 |  1 |   RUNNING |TERMINATED |
+|               438 | 10 |     READY |   RUNNING |
+|               538 | 10 |   RUNNING |     READY |
+|               538 | 10 |     READY |   RUNNING |
+|               638 | 10 |   RUNNING |     READY |
+|               638 | 10 |     READY |   RUNNING |
+|               738 | 10 |   RUNNING |     READY |
+|               738 | 10 |     READY |   RUNNING |
+|               838 | 10 |   RUNNING |     READY |
+|               838 | 10 |     READY |   RUNNING |
+|               938 | 10 |   RUNNING |     READY |
+|               938 | 10 |     READY |   RUNNING |
+|              1007 | 10 |   RUNNING |TERMINATED |
++------------------------------------------------+

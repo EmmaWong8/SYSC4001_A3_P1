@@ -1,0 +1,52 @@
++------------------------------------------------+
+|Time of Transition |PID | Old State | New State |
++------------------------------------------------+
+|                 0 | 10 |       NEW |     READY |
+|                 0 |  1 |       NEW |     READY |
+|                 0 |  0 |       NEW |     READY |
+|                 0 |  0 |     READY |   RUNNING |
+|                50 |  0 |   RUNNING |   WAITING |
+|                50 |  1 |     READY |   RUNNING |
+|                53 |  0 |   WAITING |     READY |
+|                52 |  1 |   RUNNING |     READY |
+|                53 |  0 |     READY |   RUNNING |
+|               103 |  0 |   RUNNING |   WAITING |
+|               103 |  1 |     READY |   RUNNING |
+|               106 |  0 |   WAITING |     READY |
+|               105 |  1 |   RUNNING |     READY |
+|               106 |  0 |     READY |   RUNNING |
+|               156 |  0 |   RUNNING |   WAITING |
+|               156 |  1 |     READY |   RUNNING |
+|               159 |  0 |   WAITING |     READY |
+|               158 |  1 |   RUNNING |     READY |
+|               159 |  0 |     READY |   RUNNING |
+|               209 |  0 |   RUNNING |   WAITING |
+|               209 |  1 |     READY |   RUNNING |
+|               212 |  0 |   WAITING |     READY |
+|               211 |  1 |   RUNNING |     READY |
+|               212 |  0 |     READY |   RUNNING |
+|               262 |  0 |   RUNNING |   WAITING |
+|               262 |  1 |     READY |   RUNNING |
+|               265 |  0 |   WAITING |     READY |
+|               264 |  1 |   RUNNING |     READY |
+|               265 |  0 |     READY |   RUNNING |
+|               315 |  0 |   RUNNING |TERMINATED |
+|               315 |  1 |     READY |   RUNNING |
+|               405 |  1 |   RUNNING |   WAITING |
+|               405 | 10 |     READY |   RUNNING |
+|               408 |  1 |   WAITING |     READY |
+|               407 | 10 |   RUNNING |     READY |
+|               408 |  1 |     READY |   RUNNING |
+|               508 |  1 |   RUNNING |   WAITING |
+|               508 | 10 |     READY |   RUNNING |
+|               511 |  1 |   WAITING |     READY |
+|               510 | 10 |   RUNNING |     READY |
+|               511 |  1 |     READY |   RUNNING |
+|               611 |  1 |   RUNNING |TERMINATED |
+|               611 | 10 |     READY |   RUNNING |
+|               711 | 10 |   RUNNING |     READY |
+|               711 | 10 |     READY |   RUNNING |
+|               811 | 10 |   RUNNING |     READY |
+|               811 | 10 |     READY |   RUNNING |
+|               907 | 10 |   RUNNING |TERMINATED |
++------------------------------------------------+
